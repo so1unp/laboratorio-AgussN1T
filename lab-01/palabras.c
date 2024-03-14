@@ -2,9 +2,23 @@
 #include <stdlib.h>
 
 int main(int argc, char *argv[])
-{
-    // Agregar código aquí.
+{	
+	printf("ingrese un texto... \n");	
+	char caracter;
+	while(1)
+	{
+	  caracter = getchar();
+	  
+		if(caracter == ' ')
+		{
+	  		printf("\n");
+		}
+		else
+		{
+			printf("%c",caracter);
+		}
+	  
+	}
 
-    // Termina la ejecución del programa.
     exit(EXIT_SUCCESS);
 }
