@@ -3,8 +3,14 @@
 
 int main(int argc, char *argv[])
 {
-    // Agregar código aquí.
-
-    // Termina la ejecución del programa.
+	int i;
+	int suma = 0;
+	
+	for(i=1;i<argc;i++)
+	{
+		suma+=atoi(argv[i]);
+	}
+	
+	printf("El resultado es: %d \n", suma);
     exit(EXIT_SUCCESS);
 }
