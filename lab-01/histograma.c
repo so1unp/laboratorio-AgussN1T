@@ -28,6 +28,8 @@ int main(int argc, char *argv[])
 	int j;
 	for(i = 1; i<=TAMANIO_MAXIMO; i++)
 	{
+		if(histograma[i]<1) continue;
+
 		printf("%d", i);
 		for(j = 0; j < histograma[i]; j++)
 		{
