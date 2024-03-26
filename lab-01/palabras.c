@@ -4,10 +4,9 @@
 int main(int argc, char *argv[])
 {	
 	printf("ingrese un texto... \n");	
-	char caracter;
-	while(1)
+	char caracter = 's';
+	while(caracter = getchar()!= EOF)
 	{
-	  caracter = getchar();
 	  
 		if(caracter == ' ')
 		{
@@ -17,7 +16,7 @@ int main(int argc, char *argv[])
 		{
 			printf("%c",caracter);
 		}
-	  
+			  
 	}
 
     exit(EXIT_SUCCESS);
