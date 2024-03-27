@@ -66,14 +66,27 @@ void runcmd(struct cmd *cmd)
             ecmd = (struct execcmd *) cmd;
             if (ecmd->argv[0] == 0)
                 exit(0);
-            fprintf(stderr, "exec not implemented\n");
-            // Your code here ...
+            //fprintf(stderr, "exec not implemented\n");
+            execvp(ecmd->argv[0], ecmd->argv);
+            //concatena una cadena con la descripcion del error
+            perror("exec");
+            exit(-1);
             break;
 
         case REDIR:
-            fprintf(stderr, "redir not implemented\n");
+            //fprintf(stderr, "redir not implemented\n");
             // Your code here ...
             rcmd = (struct redircmd *) cmd;
+            
+            close(rcmd->fd);
+            
+            int fd = open(rcmd->file, rcmd->mode, 0644);
+            
+            if(fd<0){
+                perror("redir");
+                exit(-1);
+            }
+
             runcmd(rcmd->cmd);
             break;
 

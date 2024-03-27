@@ -1,0 +1,9 @@
+bin
+hola.c
+hola.txt
+ls.txt
+Makefile
+README.md
+sh.c
+syscall.txt
+xv6
