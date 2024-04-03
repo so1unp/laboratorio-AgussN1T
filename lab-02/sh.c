@@ -86,7 +86,6 @@ void runcmd(struct cmd *cmd)
                 perror("redir");
                 exit(-1);
             }
-
             runcmd(rcmd->cmd);
             break;
 
