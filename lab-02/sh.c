@@ -81,7 +81,7 @@ void runcmd(struct cmd *cmd)
             close(rcmd->fd);
             
             int fd = open(rcmd->file, rcmd->mode, 0644);
-            
+
             if(fd<0){
                 perror("redir");
                 exit(-1);
