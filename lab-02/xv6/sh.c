@@ -72,21 +72,23 @@ runcmd(struct cmd *cmd)
 
   case EXEC:
     ecmd = (struct execcmd *) cmd;
-      if (ecmd->argv[0] == 0)
+      if (ecmd->argv[0] == 0){
         exit();
+      }
         exec(ecmd->argv[0], ecmd->argv);
-        perror("exec");
-        exit();
+        printf(2,"exec falló");
         break;
 
   case REDIR:
     rcmd = (struct redircmd *) cmd;
     close(rcmd->fd);
     int fd = open(rcmd->file, rcmd->mode);
+
     if(fd<0){
-      perror("redir");
+      printf(2,"redir falló");
       exit();
     }
+    
     runcmd(rcmd->cmd);
     break;
 
