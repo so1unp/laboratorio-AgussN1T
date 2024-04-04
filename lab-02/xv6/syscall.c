@@ -12,7 +12,7 @@
 // Arguments on the stack, from the user call to the C
 // library system call function. The saved user %esp points
 // to a saved program counter, and then the first argument.
-int sys_nuevasyscall(void) {
+int sys_answer(void) {
     return 42;
 }
 
@@ -132,7 +132,7 @@ static int (*syscalls[])(void) = {
 [SYS_mkdir]   sys_mkdir,
 [SYS_close]   sys_close,
 [SYS_trace]   sys_trace,
-[SYS_nuevasyscall]   sys_nuevasyscall
+[SYS_answer]   sys_answer
 };
 
 extern int trace;

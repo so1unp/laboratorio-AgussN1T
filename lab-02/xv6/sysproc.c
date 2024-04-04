@@ -101,6 +101,6 @@ sys_trace(void)
 }
 
 int
-nuevasyscall(void) {
+answer(void) {
     return 42;
 }
