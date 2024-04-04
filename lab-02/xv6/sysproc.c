@@ -100,3 +100,7 @@ sys_trace(void)
     return 0;
 }
 
+int
+nuevasyscall(void) {
+    return 42;
+}
