@@ -16,12 +16,19 @@ void signal_handler(int signum) {
    struct rusage usage;
    getrusage(RUSAGE_SELF, &usage);
    printf("Child %d (nice %2d):\t%3li\n", getpid(), getpriority(PRIO_PROCESS, getpid()), usage.ru_utime.tv_sec + usage.ru_stime.tv_sec);
+    exit(EXIT_SUCCESS);
 }
 
 int main(int argc, char *argv[])
 {
-   int cantHijos = atoi(argv[1]);
+    if(argc<3) {
+        printf("Los parámetros enviados no son los que se esperaba\n");
+        exit(0);
+        }
+
+    int cantHijos = atoi(argv[1]);
     int hijos[cantHijos];
+    int tiempoDurmiendo = atoi(argv[2]);
     int i;
 
     signal(SIGTERM, signal_handler);
@@ -40,7 +47,7 @@ int main(int argc, char *argv[])
         }
     }
     
-    sleep(3);
+    sleep(tiempoDurmiendo);
     
     for(i=0 ; i<cantHijos; i++){
         kill(hijos[i],SIGTERM);
