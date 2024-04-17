@@ -13,12 +13,12 @@ int busywork(void)
     }
 }
 
-
 void signal_handler(int signum)
 {
+    (void)signum;
     struct rusage usage;
     getrusage(RUSAGE_SELF, &usage);
-    printf("Child %d (nice %2d):\t%3li\n", getpid(), getpriority(PRIO_PROCESS, getpid()), usage.ru_utime.tv_sec + usage.ru_stime.tv_sec);
+    printf("Child %d (nice %2d):\t%3li\n", getpid(), getpriority(PRIO_PROCESS, (id_t)getpid()), usage.ru_utime.tv_sec + usage.ru_stime.tv_sec);
     exit(EXIT_SUCCESS);
 }
 
@@ -33,9 +33,13 @@ int main(int argc, char *argv[])
     int cantHijos = atoi(argv[1]);
     int hijos[cantHijos];
     int tiempoDurmiendo = atoi(argv[2]);
+    unsigned int prioridad = (unsigned)atoi(argv[3]);
     int i;
 
-    signal(SIGTERM, signal_handler);
+    struct sigaction sig;
+    sig.sa_handler = signal_handler;
+
+    sigaction(SIGTERM, &sig, NULL);
 
     printf("Hola, soy el padre con PID=%d\n", getpid());
 
@@ -51,11 +55,15 @@ int main(int argc, char *argv[])
         else if (hijos[i] == 0)
         {
             printf("Proceso hijo %d creado con PID=%d\n", i, getpid());
+            if (prioridad)
+                nice(i);
+            else
+                nice(0);
             busywork();
         }
     }
 
-    sleep(tiempoDurmiendo);
+    sleep((unsigned int)tiempoDurmiendo);
 
     for (i = 0; i < cantHijos; i++)
     {
