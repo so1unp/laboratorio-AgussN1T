@@ -9,25 +9,23 @@ void signal_handler(int signum)
 
     printf("Se recibió la señal %d %s \n", signum, strsignal(signum));
 }
+struct sigaction sig;
 
 int main(void)
 {
     
-    /*
-    struct sigaction sig;
     sig.sa_handler = signal_handler;
 
-    sigaction(signum, &sig, NULL);
-    */
+    //sigaction(signum, &sig, NULL);
    
-    int sig;
+    int signum;
     __pid_t pid = getpid();
 
     printf("Mi PID es: %d\n", pid);
 
-    for (sig = 1; sig < 255; sig++)
+    for (signum = 1; signum < 255; signum++)
     {
-        signal(sig, signal_handler);
+        sigaction(signum, &sig, NULL);
     }
 
     while (1)
