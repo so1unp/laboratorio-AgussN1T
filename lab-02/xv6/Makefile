@@ -190,6 +190,8 @@ UPROGS=\
 	_zombie\
 	_uthread\
 	_answer\
+	_testppid\
+	_pscnt\
 	_trace\
 
 fs.img: mkfs README $(UPROGS)

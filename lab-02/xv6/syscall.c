@@ -16,6 +16,24 @@ int sys_answer(void) {
     return 42;
 }
 
+int sys_getppid(void)
+{
+  return myproc()->parent->pid;
+}
+
+extern struct proc* get_ptable(void); // Declaración de la función para obtener la tabla de procesos
+
+int sys_pscnt(void) {
+    int count = 0;
+    struct proc *p;
+    
+    struct proc *ptable = get_ptable(); // Obtiene un puntero a la tabla de procesos
+    for(p = ptable; p < &ptable[NPROC]; p++){
+        if(p->state != UNUSED)
+            count++;
+    }
+    return count;
+}
 
 // Fetch the int at addr from the current process.
 int
@@ -108,6 +126,7 @@ extern int sys_wait(void);
 extern int sys_write(void);
 extern int sys_uptime(void);
 extern int sys_trace(void);
+extern int sys_getppid(void);
 
 static int (*syscalls[])(void) = {
 [SYS_fork]    sys_fork,
@@ -132,7 +151,9 @@ static int (*syscalls[])(void) = {
 [SYS_mkdir]   sys_mkdir,
 [SYS_close]   sys_close,
 [SYS_trace]   sys_trace,
-[SYS_answer]   sys_answer
+[SYS_answer]   sys_answer,
+[SYS_getppid]   sys_getppid,
+[SYS_pscnt]     sys_pscnt
 };
 
 extern int trace;
@@ -159,7 +180,9 @@ static char* syscalls_names[] = {
 [SYS_link]    "sys_link",
 [SYS_mkdir]   "sys_mkdir",
 [SYS_close]   "sys_close",
-[SYS_trace]   "sys_trace"
+[SYS_trace]   "sys_trace",
+[SYS_getppid]  "sys_getppid",
+[SYS_pscnt]   "sys_pscnt"
 };
 
 void
