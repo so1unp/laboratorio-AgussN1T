@@ -71,15 +71,19 @@ void test_fork(int count)
 }
 
 //==========================================================================
-// Código para la prueba con pthread_create()
+void* funcionHilos(void * s){
+    printf("soy un hilo");
+    pthread_exit(NULL);
+}
 //==========================================================================
 
 void test_thread(int count) 
 {
     int j;
-    
+    pthread_t hilos[count];
+
     for (j = 0; j < count; j++) {
-        // COMPLETAR: CREAR UN HILO
-        // COMPLETAR: ESPERAR POR HILO RECIEN CREADO
+        pthread_create(&hilos[j],NULL,funcionHilos,NULL);
+        pthread_join(hilos[j],NULL);
     }
 }
