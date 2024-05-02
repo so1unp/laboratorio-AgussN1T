@@ -57,3 +57,13 @@ int main(int argc, char *argv[])
 
     exit(EXIT_SUCCESS);
 }
+/*
+Probando distintos valores hasta que se encuentre una condición de carrera. 
+¿Por qué ocurre esta situación de carrera? ¿Cómo se podría evitar?
+La situación de carrera ocurre cuando múltiples hilos intentan acceder y modificar la misma variable global glob sin una sincronización adecuada. En este caso, la función increment_glob no está protegida por ningún mecanismo de exclusión mutua, como un mutex, lo que puede resultar en una condición de carrera.
+
+Para evitar la condición de carrera, puedes utilizar un mutex para sincronizar el acceso a la variable global glob. Aquí te muestro cómo modificar el código para lograr esto:
+
+*/
+
+
