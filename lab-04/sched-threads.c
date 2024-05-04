@@ -7,6 +7,8 @@
 #include <strings.h>
 #include <pthread.h>
 
+
+
 pthread_t *threads;
 int *buf;
 
@@ -65,10 +67,9 @@ int main(int argc, char *argv[]) {
 
     sched_policy = argv[1][1] == 'R' ? SCHED_RR : SCHED_FIFO;
 
-    // Reserva espacio para un arreglo donde guardar variables de tipo pthread_t
     threads = (pthread_t*) malloc(count * sizeof(pthread_t));
 
-    // Reserva espacio para el buffer donde los hilos escribiran su identificador
+    
     buf = (int*) malloc( count * items * sizeof(int));
     bzero(buf, items * count * sizeof(int));
 
@@ -77,31 +78,36 @@ int main(int argc, char *argv[]) {
     pthread_attr_t attr;
     struct sched_param param;
 
-    // Inicializa la estructura attr
+    
     pthread_attr_init(&attr);
 
-    // Indica que al crear un hilo usando attr como parámetros, este debe
-    // utilizar la política de planificación indicada en dichos parámetros.
-    // COMPLETAR: pthread_attr_setinheritsched()
 
-    // Indica que la política de planificación será Round Robin.
-    // COMPLETAR: pthread_attr_setschedpolicy()
+    pthread_attr_setinheritsched(&attr, PTHREAD_EXPLICIT_SCHED);
 
-    // Indica el nivel de prioridad que tendrá el hilo creado utilizando attr.
+    
+    pthread_attr_setschedpolicy(&attr, sched_policy);
+
+    
     param.sched_priority = 1;
-    // COMPLETAR: pthread_attr_setschedparam()
+    pthread_attr_setschedparam(&attr, &param);
 
-    // Indica que el hilo creado utilizando el atributo attr debe ejecutar
-    // siempre en la CPU 0.
-    // COMPLETAR: usar CPU_ZERO, CPU_SET y pthread_attr_setaffinity_np()
+    
+    cpu_set_t cpuset;
+    CPU_ZERO(&cpuset);
+    CPU_SET(0, &cpuset);
+    pthread_attr_setaffinity_np(&attr, sizeof(cpu_set_t), &cpuset);
 
-    // Crea los hilos.
-    // COMPLETAR
+    
+    for (i = 0; i < count; i++) {
+        pthread_create(&threads[i], &attr, write_buffer, (void *)(long)i);
+    }
 
-    // Espera a que terminen todos los hilos.
-    // COMPLETAR
+    
+    for (i = 0; i < count; i++) {
+        pthread_join(threads[i], &status);
+    }
 
-    // Imprime el buffer.
+    
     for (i = 0; i < count * items; i++) {
         printf("%d ", buf[i]);
     }
