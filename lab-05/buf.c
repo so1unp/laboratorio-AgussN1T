@@ -23,6 +23,9 @@ struct params {
     int wait_cons;
     int items;
     struct buffer* buf;
+    pthread_mutex_t mutex;
+    sem_t lleno;
+    sem_t vacio;
 } params_t;
 
 /* Productor */
@@ -33,8 +36,19 @@ static void* producer(void *p)
     struct params *params = (struct params*) p;
 
     for (i = 0; i < params->items; i++) {
+
+        sem_wait(&params->vacio);
+        
+        
+        pthread_mutex_lock(&params->mutex);
+        if(params->buf)
         params->buf->buf[i % params->buf->size] = i;
         // Espera una cantidad aleatoria de microsegundos.
+
+        
+        pthread_mutex_unlock(&params->mutex);
+        
+        sem_post(&params->lleno);
         usleep(rand() % params->wait_prod);
     }
 
@@ -52,8 +66,14 @@ static void* consumer(void *p)
     int *reader_results = (int*) malloc(sizeof(int)*params->items);
 
     for (i = 0; i < params->items; i++) {
+        sem_wait(&params->lleno);
+        
+
+        pthread_mutex_lock(&params->mutex);
         reader_results[i] = params->buf->buf[i % params->buf->size];
         // Espera una cantidad aleatoria de microsegundos.
+        pthread_mutex_unlock(&params->mutex);
+        sem_post(&params->vacio);
         usleep(rand() % params->wait_prod);
     }
 
@@ -129,7 +149,14 @@ int main(int argc, char** argv)
         fprintf(stderr, "cons-wait tiene que ser mayor que cero.\n");
         exit(EXIT_FAILURE);
     }
+    //crea el mutex
+    pthread_mutex_init(&params->mutex,NULL);
+    
+    //crea el semaforo
+    sem_init(&params->vacio, 0, atoi(argv[1]));
 
+    sem_init(&params->lleno, 0, 0);
+    
     // Inicializa semilla para números pseudo-aleatorios.
     srand(getpid());
 
