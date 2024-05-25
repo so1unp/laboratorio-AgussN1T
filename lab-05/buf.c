@@ -43,9 +43,7 @@ static void* producer(void *p)
         pthread_mutex_lock(&params->mutex);
         if(params->buf)
         params->buf->buf[i % params->buf->size] = i;
-        // Espera una cantidad aleatoria de microsegundos.
-
-        
+        // Espera una cantidad aleatoria de microsegundos.        
         pthread_mutex_unlock(&params->mutex);
         
         sem_post(&params->lleno);
