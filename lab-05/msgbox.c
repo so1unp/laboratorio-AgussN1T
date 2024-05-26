@@ -6,10 +6,9 @@
 #include <sys/stat.h>
 #include <unistd.h>
 #include <errno.h>
-
 #define USERNAME_MAXSIZE    15  // Máximo tamaño en caracteres del nombre del remitente.
 #define TXT_SIZE            100 // Máximo tamaño del texto del mensaje.
-#define QUEUE_PERMISSIONS 0660
+#define QUEUE_PERMISSIONS 0622
 /**
  * Estructura del mensaje:
  * - sender: nombre del usuario que envió el mensaje.
@@ -25,6 +24,8 @@ typedef struct msg msg_t;
 /**
  * Imprime información acerca del uso del programa.
  */
+
+
 void usage(char *argv[])
 {
     fprintf(stderr, "Uso: %s comando parametro\n", argv[0]);
@@ -39,7 +40,14 @@ void usage(char *argv[])
 }
 
 void create_queue(const char *queue_name) {
-    mqd_t mq = mq_open(queue_name, O_CREAT | O_RDONLY, QUEUE_PERMISSIONS, NULL);
+    umask(0000);
+    struct mq_attr attr;
+
+    attr.mq_flags = 0;
+    attr.mq_maxmsg = 10;
+    attr.mq_msgsize = sizeof(msg_t);
+    mqd_t mq = mq_open(queue_name, O_CREAT | O_RDONLY, QUEUE_PERMISSIONS, &attr);
+    
     if (mq == (mqd_t)-1) {
         perror("Error creando la cola de mensajes");
     } else {
@@ -82,7 +90,7 @@ void send_message(const char *queue_name, const char *message) {
 }
 
 void receive_message(const char *queue_name) {
-    mqd_t mq = mq_open(queue_name, O_RDONLY);
+    mqd_t mq = mq_open(queue_name, O_RDONLY | O_NONBLOCK);
     if (mq == (mqd_t)-1) {
         perror("Error abriendo la cola de mensajes");
         return;
