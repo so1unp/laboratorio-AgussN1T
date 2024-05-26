@@ -1,17 +1,29 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <fcntl.h>
+#include <sys/mman.h>
+#include <unistd.h>
+#include <string.h>
+#include <pthread.h>
+#include <semaphore.h>
+#include <sys/stat.h>
 
-#define ITEMS       15
-#define MAX_WORD    50
 
-struct wordheap {
+#define ITEMS 15
+#define MAX_WORD 50
+
+struct wordstack
+{
     int free;
     int items;
     int max_word;
+    pthread_mutex_t mutex;
+    sem_t full;
+    sem_t empty;
     char heap[ITEMS][MAX_WORD];
 };
 
-typedef struct wordhead wordheap_t;
+typedef struct wordstack wordstack_t;
 
 void usage(char *argv[])
 {

@@ -6,6 +6,7 @@
 #include <sys/stat.h>
 #include <unistd.h>
 #include <errno.h>
+
 #define USERNAME_MAXSIZE    15  // Máximo tamaño en caracteres del nombre del remitente.
 #define TXT_SIZE            100 // Máximo tamaño del texto del mensaje.
 #define QUEUE_PERMISSIONS 0622
