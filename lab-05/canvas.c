@@ -29,6 +29,7 @@ void usage(char *argv[])
 
 void create_canvas(char *nombre)
 {
+    umask(0000);
     int fd = shm_open(nombre, O_CREAT | O_RDWR, 0622);
 
     if (fd < 0)
