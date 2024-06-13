@@ -25,7 +25,12 @@ int main(void) {
     if (pid == 0) {
         // Agregar aquí el código pedido en el ejercicio.
 
-        // Esperamos la señal SIGUSR1
+        a = 1;
+        int i;
+        for (i = 0; i < 8192; i++) {
+            p[i] = 'A';
+        }
+
         pause();
     } else {
         // Esperamos la señal SIGUSR1
