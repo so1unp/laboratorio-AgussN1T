@@ -12,7 +12,7 @@ sys_pgcnt(void)
     // PTE_U: Si la página corresponde a un proceso de usuario.
     unsigned int flag = PTE_P | PTE_U;
 
-    for(i=0; i < NPDENTRIES; i++)
+    for(i=0; i < NPDENTRIES; i++){
         // i-ésima entrada en la tabla de directorio.
         pde = &((myproc()->pgdir)[i]);
 
